@@ -1,26 +1,41 @@
 import ccxt
+from datetime import datetime
+import time
 
 exchange = ccxt.bybit()
 
-candles = exchange.fetch_ohlcv(
-    "BTC/USDT",
-    timeframe="1m",
-    limit=5
-)
+while True:
 
-closes = []
+    candles = exchange.fetch_ohlcv(
+        "BTC/USDT",
+        timeframe="1m",
+        limit=20
+    )
 
-for candle in candles:
-    closes.append(candle[4])
+    closes = []
 
-average = sum(closes) / len(closes)
+    for candle in candles:
+        closes.append(candle[4])
 
-current_price = closes[-1]
+    fast_ma = sum(closes[-5:]) / 5
+    slow_ma = sum(closes) / 20
 
-print(f"Current price: {current_price}")
-print(f"Average price: {average}")
+    now = datetime.now()
 
-if current_price > average:
-    print("BUY SIGNAL")
-else:
-    print("SELL SIGNAL")
+    if fast_ma > slow_ma:
+        signal = "BUY"
+    else:
+        signal = "SELL"
+
+    print(f"Time: {now}")
+    print(f"Fast MA: {fast_ma}")
+    print(f"Slow MA: {slow_ma}")
+    print(f"Signal: {signal}")
+
+    with open("signals.txt", "a") as file:
+        file.write(
+            f"{now} | {signal} | Fast={fast_ma} | Slow={slow_ma}\n"
+        )
+
+    print("Waiting 60 seconds...")
+    time.sleep(60)
