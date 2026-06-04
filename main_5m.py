@@ -31,20 +31,20 @@ entry_strength = None
 
 # ===== FILES =====
 
-if not os.path.exists("signals.csv"):
-    with open("signals.csv", "w") as file:
+if not os.path.exists("signals_5m.csv"):
+    with open("signals_5m.csv", "w") as file:
         file.write(
             "time,signal,strength,price,rsi,ema9,ema21,ema_gap\n"
         )
 
-if not os.path.exists("bot_log.csv"):
-    with open("bot_log.csv", "w") as file:
+if not os.path.exists("bot_log_5m.csv"):
+    with open("bot_log_5m.csv", "w") as file:
         file.write(
             "time,price,rsi,ema9,ema21,ema_gap,signal,strength\n"
         )
 
-if not os.path.exists("position_log.csv"):
-    with open("position_log.csv", "w") as file:
+if not os.path.exists("position_log_5m.csv"):
+    with open("position_log_5m.csv", "w") as file:
         file.write(
             "entry_time,exit_time,entry_price,exit_price,profit,strength\n"
         )
@@ -173,7 +173,7 @@ try:
                     )
 
                     with open(
-                        "position_log.csv",
+                        "position_log_5m.csv",
                         "a"
                     ) as file:
 
@@ -207,7 +207,7 @@ try:
                     entry_price = None
                     entry_strength = None
 
-            with open("signals.csv", "a") as file:
+            with open("signals_5m.csv", "a") as file:
                 file.write(
                     f"{now},"
                     f"{signal},"
@@ -222,7 +222,7 @@ try:
             last_signal = signal
             last_signal_time = now
 
-        with open("bot_log.csv", "a") as file:
+        with open("bot_log_5m.csv", "a") as file:
             file.write(
                 f"{now},"
                 f"{closes[-1]},"

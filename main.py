@@ -21,14 +21,14 @@ sell_count = 0
 
 COOLDOWN_MINUTES = 5
 
-if not os.path.exists("signals.csv"):
-    with open("signals.csv", "w") as file:
+if not os.path.exists("signals_1m.csv"):
+    with open("signals_1m.csv", "w") as file:
         file.write(
             "time,signal,strength,price,rsi,ema9,ema21,ema_gap\n"
         )
 
-if not os.path.exists("bot_log.csv"):
-    with open("bot_log.csv", "w") as file:
+if not os.path.exists("bot_log_1m.csv"):
+    with open("bot_log_1m.csv", "w") as file:
         file.write(
             "time,price,rsi,ema9,ema21,ema_gap,signal,strength\n"
         )
@@ -107,8 +107,6 @@ try:
             ):
                 signal = "SELL"
 
-        # IGNORUJ WEAK SYGNAŁY
-
         if strength == "WEAK":
             signal = "HOLD"
 
@@ -140,7 +138,7 @@ try:
             elif signal == "SELL":
                 sell_count += 1
 
-            with open("signals.csv", "a") as file:
+            with open("signals_1m.csv", "a") as file:
                 file.write(
                     f"{now},{signal},{strength},{closes[-1]},{rsi:.2f},{ema9:.2f},{ema21:.2f},{ema_gap:.2f}\n"
                 )
@@ -148,7 +146,7 @@ try:
             last_signal = signal
             last_signal_time = now
 
-        with open("bot_log.csv", "a") as file:
+        with open("bot_log_1m.csv", "a") as file:
             file.write(
                 f"{now},{closes[-1]},{rsi:.2f},{ema9:.2f},{ema21:.2f},{ema_gap:.2f},{signal},{strength}\n"
             )
